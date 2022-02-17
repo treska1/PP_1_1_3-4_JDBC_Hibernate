@@ -10,7 +10,7 @@ import java.util.List;
 import static jm.task.core.jdbc.util.Util.getConnection;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS users(id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(64), lastName VARCHAR(64), age INT)";
+    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS users(id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(64), lastName VARCHAR(64), age tinyint)";
     private static final String DELETE_TABLE = "DROP TABLE IF EXISTS users";
     private static final String ADD_USER = "INSERT INTO users (name, lastName, age) VALUES(?, ?, ?)";
     private static final String REMOVE_USER = "DELETE FROM users WHERE id = ?";
