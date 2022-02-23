@@ -19,11 +19,11 @@ public class Main {
         userService.saveUser("Jimmy","Neutron", (byte)12);
         userService.saveUser("John","Travolta", (byte)28);
         userService.saveUser("Alex","Pistoletov", (byte)33);
-
+//
         userService.getAllUsers();
 
-        userService.cleanUsersTable();
+//        userService.cleanUsersTable();
 
-        userService.dropUsersTable();
+//        userService.dropUsersTable();
     }
 }

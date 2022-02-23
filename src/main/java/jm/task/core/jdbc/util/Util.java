@@ -16,9 +16,8 @@ public class Util {
     public static Connection getConnection() {
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(URL,USERNAME, PASSWORD);
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException  e) {
             System.out.println("Connection error: " + e);
         }
         return connection;
