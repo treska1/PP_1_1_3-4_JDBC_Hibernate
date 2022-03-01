@@ -22,7 +22,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        try (Session session = util.getSessionFactory().getCurrentSession()) {
+        try (Session session = util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.createSQLQuery(CREATE_TABLE).executeUpdate();
 
@@ -35,7 +35,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
-        try (Session session = util.getSessionFactory().getCurrentSession()) {
+        try (Session session = util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
             session.createSQLQuery(DELETE_TABLE).executeUpdate();
@@ -51,21 +51,26 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        try (Session session = util.getSessionFactory().openSession()) {
+        Session session = util.getSessionFactory().openSession();
+        try  {
             transaction = session.beginTransaction();
 
             session.save(new User(name, lastName, age));
+
             System.out.println("User с именем - "+name + " добавлен в базу данных");
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
             transaction.rollback();
+        } finally {
+            session.close();
         }
     }
 
     @Override
     public void removeUserById(long id) {
-        try (Session session = util.getSessionFactory().getCurrentSession()) {
+        Session session = util.getSessionFactory().openSession();
+        try  {
             transaction = session.beginTransaction();
 
             session.delete(session.get(User.class, id));
@@ -73,13 +78,16 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             e.printStackTrace();
             transaction.rollback();
+        } finally {
+            session.close();
         }
     }
 
     @Override
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        try (Session session = util.getSessionFactory().openSession()) {
+        Session session = util.getSessionFactory().openSession();
+        try  {
             transaction = session.beginTransaction();
 
             users = session.createQuery("FROM User", User.class).getResultList();
@@ -91,13 +99,16 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             e.printStackTrace();
             transaction.rollback();
+        } finally {
+            session.close();
         }
         return users;
     }
 
     @Override
     public void cleanUsersTable() {
-        try (Session session = util.getSessionFactory().getCurrentSession()) {
+        Session session = util.getSessionFactory().getCurrentSession();
+        try  {
             transaction = session.beginTransaction();
 
             session.createQuery("DELETE User").executeUpdate();
@@ -105,6 +116,8 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             e.printStackTrace();
             transaction.rollback();
+        } finally {
+            session.close();
         }
     }
 }
