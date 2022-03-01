@@ -10,7 +10,7 @@ import java.util.List;
 import static jm.task.core.jdbc.util.Util.getConnection;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS users(id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(64), lastName VARCHAR(64), age INT)";
+    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS users(id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(64) not null, lastName VARCHAR(64)not null, age INT)";
     private static final String DELETE_TABLE = "DROP TABLE IF EXISTS users";
     private static final String ADD_USER = "INSERT INTO users (name, lastName, age) VALUES(?, ?, ?)";
     private static final String REMOVE_USER = "DELETE FROM users WHERE id = ?";
@@ -44,7 +44,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         Connection connection = Util.getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER)){
+        try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER)) {
             connection.setAutoCommit(false);
 
 
@@ -83,8 +83,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        try (Connection connection = Util.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SHOW_USERS)) {
+        Connection connection = Util.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SHOW_USERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             System.out.println();
             while (resultSet.next()) {
@@ -97,11 +97,20 @@ public class UserDaoJDBCImpl implements UserDao {
                 users.add(user);
                 System.out.println(user);
             }
-//            System.out.println(users);
         } catch (SQLException e) {
             e.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-
         return users;
     }
 
