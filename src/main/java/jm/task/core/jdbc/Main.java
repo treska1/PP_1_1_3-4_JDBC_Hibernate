@@ -10,20 +10,19 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        // реализуйте алгоритм здесь
         UserServiceImpl userService = new UserServiceImpl();
 
         userService.createUsersTable();
 
-        userService.saveUser("Tom","Serenity", (byte)19);
-        userService.saveUser("Jimmy","Neutron", (byte)12);
-        userService.saveUser("John","Travolta", (byte)28);
-        userService.saveUser("Alex","Pistoletov", (byte)33);
-//
+        userService.saveUser("Tom", "Serenity", (byte) 19);
+        userService.saveUser("Jimmy", "Neutron", (byte) 12);
+        userService.saveUser("John", "Travolta", (byte) 28);
+        userService.saveUser("Alex", "Pistoletov", (byte) 33);
+
         userService.getAllUsers();
 
-//        userService.cleanUsersTable();
+        userService.cleanUsersTable();
 
-//        userService.dropUsersTable();
+        userService.dropUsersTable();
     }
 }
